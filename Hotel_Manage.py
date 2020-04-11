@@ -1,12 +1,14 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
+# coding = utf-8
 
 # https://www.youtube.com/watch?v=RaESMr2DnGM -> Captain D.J Oamen
 # 1:32, 2:00, 5:53, 7:57, 9:13, 10:11, 10:17, 10:35, 11:25, 14:08
 # 20:55, 22:31, 26:57, 32:19, 37:26, 39:37, 42:48, 45:00, 52:08,
-# 55:08, 1:00:18, 1:07:43, 1:16:24
+# 55:08, 1:00:18, 1:07:43, 1:16:24, 1:20:43,
+# 1:21:56, 1:22:33, 1:23:17, 1:23:37
 
 # Craig Miles -> cmiles69@hushmail.com
+# https://github.com/cmiles69/Hotel.git
 
 import tkinter
 from tkinter import font
@@ -16,13 +18,14 @@ import tkinter.scrolledtext as tkst
 import tkinter.messagebox as msg_box
 from datetime import date
 import string
+import re
 import random
 import secrets
 import names  # Need to pip3 install names --user
 from faker import Faker  # Date faker and more - need to pip3 install 
 # faker-e164 -> phone numbers pip3 install
 import pycountry  # Need to pip3 install pycountry --user
-from Database import Hotel_Database
+import Hotel_DB
 
 class Hotel:
 
@@ -617,11 +620,41 @@ class Hotel:
         self.tbox = tkst.ScrolledText( self.frm_text,
                                        background = 'red',
                                        foreground = 'blue',
+                                       wrap = tkinter.WORD,
                                        relief = tkinter.RIDGE )
         self.tbox.place( relx = 0,
                          rely = 0,
                          relwidth = 1,
                          relheight = 1 )
+
+# Decided to place a 'Treeview' widget into ScrolledText================
+
+        style = ttk.Style()
+        style.configure( 'Treeview.Heading', font = self.title_font )
+        style.configure( 'Treeview', background = 'red',
+                                     foreground = 'blue' )
+
+        self.tree_view = ttk.Treeview( self.tbox,
+            column = ( 'column1',
+                       'column2',
+                       'column3',
+                       'column4',
+                       'column5' ), show = 'headings' )
+        self.tree_view.column( 'column1', width = 100 )
+        self.tree_view.column( 'column2', width = 120 )
+        self.tree_view.column( 'column3', width = 120 )
+        self.tree_view.column( 'column4', width = 120 )
+        self.tree_view.heading( '#1', text = 'Reference :' )
+        self.tree_view.heading( '#2', text = 'First Name :' )
+        self.tree_view.heading( '#3', text = 'Surname :' )
+        self.tree_view.heading( '#4', text = 'Mobile :' )
+        self.tree_view.heading( '#5', text = 'Email :' )
+        self.tree_view.bind( '<<TreeviewSelect>>',
+                            self.On_Tree_Select )
+        self.tree_view.place( relx = 0,
+                              rely = 0,
+                              relwidth = 1,
+                              relheight = 1 )
 
 #=======================Number Of Days Frame============================
         
@@ -694,14 +727,109 @@ class Hotel:
         self.ent_email.delete( 0, tkinter.END )
         self.ent_nationality.delete( 0, tkinter.END )
         self.ent_gender.current( 0 )
+        self.check_in_date.set( '' )
+        self.check_out_date.set( '' )
         self.ent_proof_of_ID.current( 0 )
         self.ent_meal_type.current( 0 )
         self.ent_room_type.current( 0 )
         self.ent_room_number.current( 0 )
         self.ent_room_phone.current( 0 )
-        self.tbox.delete( 0.0, tkinter.END )
-        self.setup_random_booking_information()
+        # for idx in self.tree_view.get_children():
+        #     self.tree_view.delete( idx )
         
+
+    def Random_Data( self ):
+        self.setup_random_booking_information()
+
+
+    def Add_Booking( self ):
+        booking = [( self.ent_customer_ID.get(),
+                     self.ent_firstname.get(),
+                     self.ent_surname.get(),
+                     self.ent_address.get(),
+                     self.ent_DOB.get(),
+                     self.ent_post_code.get(),
+                     self.ent_mobile.get(),
+                     self.ent_email.get(),
+                     self.ent_nationality.get(),
+                     self.ent_gender.get(),
+                     self.check_in_date.get(),
+                     self.check_out_date.get(),
+                     self.ent_proof_of_ID.get(),
+                     self.ent_meal_type.get(),
+                     self.ent_room_type.get(),
+                     self.ent_room_number.get(),
+                     self.ent_room_phone.get() )]
+
+        last_row = Hotel_DB.insert_hotel_booking( booking )
+        print( 'Last Row ID is :', last_row )
+
+    def Search_Booking( self ):
+        from typing import Mapping, Sequence
+        customerID = self.On_Tree_Select( event = None )
+        data = Hotel_DB.search_hotel_booking_record( customerID )
+        #print( data.keys())
+        print( data[3] )
+        print( data[r'Address'])
+        #xxx = date[r'Address']
+        #print( xxx )
+        self.Reset()
+
+        self.customer_ID.set( data[r'Customer_ID'])
+        self.firstname.set( data[r'Firstname'])
+        self.surname.set( data[r'Surname'])
+        self.address.set( data[r'Address'])
+        self.date_of_birth.set( data[r'Birth_Date']) 
+        self.post_code.set( data[r'Post_Code'])
+        self.mobile_phone.set( data[r'Mobile'])
+        self.email.set( data[r'Email'])
+        self.nationality.set( data[r'Nationality'])
+        self.gender.set( data[r'Gender'])
+        self.check_in_date.set( data[r'DateIn']) 
+        self.check_out_date.set( data[r'DateOut'])
+        self.proof_of_ID.set( data[r'ID_Type'])
+        self.meal_type.set( data[r'Meal_Type'])
+        self.room_type.set( data[r'Room_Type'])
+        self.room_number.set( data[r'Room_Number'])
+        self.room_phone.set( data[r'Room_Phone'])
+
+    def Display_Booking( self ):
+        #self.tbox.delete( 0.0, tkinter.END )
+        for idx in self.tree_view.get_children():
+            self.tree_view.delete( idx )
+        for row in Hotel_DB.display_hotel_booking_record():
+            self.tree_view.insert( '', tkinter.END,
+                                    values = ( row[0],
+                                               row[1],
+                                               row[2],
+                                               row[3],
+                                               row[4] ))
+
+    def On_Tree_Select(self, event):
+        print("selected items:")
+        # curItem = self.tree_view.focus() # These 2 lines work!
+        # print( self.tree_view.item( curItem ))
+
+        item = self.tree_view.selection()[0]
+        # print( 'Item Clicked :', item )
+        # print( 'Customer Reference :',
+        #        self.tree_view.item( item )['values'][0] )
+        # print( 'Customer First Name :',
+        #        self.tree_view.item( item )['values'][1] )
+        # print( 'Customer Last Name :',
+        #        self.tree_view.item( item )['values'][2] )
+        # print( 'Customer Mobile Phone :',
+        #        self.tree_view.item( item )['values'][3] )
+        # print( 'Customer Email :',
+        #        self.tree_view.item( item )['values'][4] )
+
+        ''' Return Customer Reference Number '''
+
+        return( self.tree_view.item( item )['values'][0] )
+
+        # for idx in range( 5 ):
+        #     print( self.tree_view.item( item )['values'][idx] )
+
 #===============================Buttons=================================                        
 
     def setup_buttons( self ): # self.frm_button purple
@@ -710,6 +838,7 @@ class Hotel:
                                 borderwidth = 4,
                                 activeforeground = 'SlateBlue1',
                                 activebackground = 'thistle',
+                                command = self.Add_Booking,
                                 text = 'AddNew/Total' )
         self.btn_total_data.place( relx = 0.006,
                                    rely = 0,
@@ -720,6 +849,7 @@ class Hotel:
                                 borderwidth = 4,
                                 activeforeground = 'blue',
                                 activebackground = 'sea green',
+                                command = self.Display_Booking,
                                 text = 'Display' )
         self.btn_display.place( relx = 0.141,
                                 rely = 0,
@@ -750,6 +880,7 @@ class Hotel:
                                 borderwidth = 4,
                                 activeforeground = 'blue',
                                 activebackground = 'ghost white',
+                                command = self.Search_Booking,
                                 text = 'Search' )
         self.btn_search.place( relx = 0.382,
                                rely = 0,
@@ -766,6 +897,17 @@ class Hotel:
                               rely = 0,
                               relheight = 1 )
 
+        self.btn_random = tkinter.Button( self.frm_button,
+                                font = self.btn_font,
+                                borderwidth = 4,
+                                activeforeground = 'yellow',
+                                activebackground = 'gray34',
+                                command = self.Random_Data,
+                                text = 'Random' )
+        self.btn_random.place( relx = 0.530,
+                               rely = 0,
+                               relheight = 1 )
+
         self.btn_exit = tkinter.Button( self.frm_button,
                                 font = self.btn_font,
                                 borderwidth = 4,
@@ -773,7 +915,7 @@ class Hotel:
                                 activebackground = 'ghost white',
                                 command = self.Ask_Quit,
                                 text = 'Exit' )
-        self.btn_exit.place( relx = 0.530,
+        self.btn_exit.place( relx = 0.620,
                              rely = 0,
                              relheight = 1 )
 
@@ -790,8 +932,21 @@ class Hotel:
                                     start_date = '-90y',
                                     end_date = '-15y' ):
         fake = Faker()
-        FD = fake.date_between( start_date, end_date )
+        #FD = fake.date_between( start_date, end_date )
+        FD = fake.date_of_birth()  # Max age = 115
         return( FD.strftime( '%d-%m-%Y' ))
+
+    def generate_random_future_date( self ):
+        ''' end_date = +30d '''
+        #Faker.seed( 359678923 )
+        fake = Faker()
+        FD = fake.date_between(start_date = 'today',
+                               end_date = '+25d')
+        return( FD.strftime( '%d-%m-%Y' ))
+
+    def generate_date_today( self ):
+        TD = date.today()
+        return( TD.strftime( '%d-%m-%Y' ))
 
     def generate_random_address( self ):
         fake = Faker()
@@ -867,7 +1022,11 @@ class Hotel:
         ''' Using string variables line 88.
             For the Combo Boxes a Zero entry
             means no choice ( blank ). This is
-            Not an error, just a choice. '''
+            Not an error, just a choice.
+            Also the fake address generator has
+            caused 'subscriptable' problems,
+            fixed by 'coding=utf8' on second line
+            of this file '''
 
         self.customer_ID.set( str( secrets.token_hex( 5 )))
         self.firstname.set( self.generate_random_first_name())
@@ -879,6 +1038,8 @@ class Hotel:
         self.email.set( self.generate_random_email())
         self.nationality.set( self.generate_random_country())
         self.gender.set( self.generate_random_gender())
+        self.check_in_date.set( self.generate_date_today())
+        self.check_out_date.set( self.generate_random_future_date())
         self.proof_of_ID.set( self.generate_random_ID_type())
         self.meal_type.set( self.generate_random_meal())
         self.room_type.set( self.generate_random_room_type())
