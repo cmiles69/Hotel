@@ -5,7 +5,8 @@
 # 1:32, 2:00, 5:53, 7:57, 9:13, 10:11, 10:17, 10:35, 11:25, 14:08
 # 20:55, 22:31, 26:57, 32:19, 37:26, 39:37, 42:48, 45:00, 52:08,
 # 55:08, 1:00:18, 1:07:43, 1:16:24, 1:20:43,
-# 1:21:56, 1:22:33, 1:23:17, 1:23:37
+# 1:21:56, 1:22:33, 1:23:17, 1:23:37, 1:29:27,
+# 1:31:16, 1:35:50, 1:37:08
 
 # Craig Miles -> cmiles69@hushmail.com
 # https://github.com/cmiles69/Hotel.git
@@ -17,6 +18,7 @@ from tkcalendar import DateEntry  # Need to pip3 install tkcalendar
 import tkinter.scrolledtext as tkst
 import tkinter.messagebox as msg_box
 from datetime import date
+from datetime import datetime
 import string
 import re
 import random
@@ -90,6 +92,9 @@ class Hotel:
         self.btn_font = font.Font( family = 'Bitstream Charter',
                                    size = 16,
                                    weight = 'bold' )
+        self.message_font = font.Font( family = 'Bitstream Charter',
+                                       size = 26,
+                                       weight = 'bold' )
 
 #============================Variables==================================
 
@@ -536,84 +541,92 @@ class Hotel:
                                    relwidth = 0.52,
                                    relheight = 0.045 )
 
-#=====================Title Frame=======================================
+#=========================Title Frame===================================
 
-        self.lbl_customer_reference = tkinter.Label( self.frm_title,
-                                font = self.title_font,
+        self.lbl_message = tkinter.Label( self.frm_title,
+                                font = self.message_font,
                                 background = 'yellow',
-                                text = 'Customer Ref' )
-        self.lbl_customer_reference.place( relx = 0,
-                                           rely = 0.30 )
+                                text = 'Some Kind Of Message Here' )
+        self.lbl_message.place( relx = 0.25,
+                                rely = 0.1 )
 
-        self.lbl_first_name = tkinter.Label( self.frm_title,
-                                font = self.title_font,
-                                background = 'yellow',
-                                text = 'Firstname' )
-        self.lbl_first_name.place( relx = 0.130,
-                                   rely = 0.30 )
 
-        self.lbl_sur_name = tkinter.Label( self.frm_title,
-                                font = self.title_font,
-                                background = 'yellow',
-                                text = 'Surname' )
-        self.lbl_sur_name.place( relx = 0.23,
-                                 rely = 0.30 )
+        # self.lbl_customer_reference = tkinter.Label( self.frm_title,
+        #                         font = self.title_font,
+        #                         background = 'yellow',
+        #                         text = 'Customer Ref' )
+        # self.lbl_customer_reference.place( relx = 0,
+        #                                    rely = 0.30 )
 
-        self.lbl_street_address = tkinter.Label( self.frm_title,
-                                font = self.title_font,
-                                background = 'yellow',
-                                text = 'Street Address' )
-        self.lbl_street_address.place( relx = 0.330,
-                                       rely = 0.30 )
+        # self.lbl_first_name = tkinter.Label( self.frm_title,
+        #                         font = self.title_font,
+        #                         background = 'yellow',
+        #                         text = 'Firstname' )
+        # self.lbl_first_name.place( relx = 0.130,
+        #                            rely = 0.30 )
 
-        self.lbl_sex_type = tkinter.Label( self.frm_title,
-                                font = self.title_font,
-                                background = 'yellow',
-                                text = 'Gender' )
-        self.lbl_sex_type.place( relx = 0.470,
-                                 rely = 0.30 )
+        # self.lbl_sur_name = tkinter.Label( self.frm_title,
+        #                         font = self.title_font,
+        #                         background = 'yellow',
+        #                         text = 'Surname' )
+        # self.lbl_sur_name.place( relx = 0.23,
+        #                          rely = 0.30 )
 
-        self.lbl_cell_phone = tkinter.Label( self.frm_title,
-                                font = self.title_font,
-                                background = 'yellow',
-                                text = 'Mobile' )
-        self.lbl_cell_phone.place( relx = 0.550,
-                                   rely = 0.30 )
+        # self.lbl_street_address = tkinter.Label( self.frm_title,
+        #                         font = self.title_font,
+        #                         background = 'yellow',
+        #                         text = 'Street Address' )
+        # self.lbl_street_address.place( relx = 0.330,
+        #                                rely = 0.30 )
 
-        self.lbl_country = tkinter.Label( self.frm_title,
-                                font = self.title_font,
-                                background = 'yellow',
-                                text = 'Nationality' )
-        self.lbl_country.place( relx = 0.630,
-                                rely = 0.30 )
+        # self.lbl_sex_type = tkinter.Label( self.frm_title,
+        #                         font = self.title_font,
+        #                         background = 'yellow',
+        #                         text = 'Gender' )
+        # self.lbl_sex_type.place( relx = 0.470,
+        #                          rely = 0.30 )
 
-        self.lbl_ID = tkinter.Label( self.frm_title,
-                                font = self.title_font,
-                                background = 'yellow',
-                                text = 'ID' )
-        self.lbl_ID.place( relx = 0.745,
-                           rely = 0.30 )
+        # self.lbl_cell_phone = tkinter.Label( self.frm_title,
+        #                         font = self.title_font,
+        #                         background = 'yellow',
+        #                         text = 'Mobile' )
+        # self.lbl_cell_phone.place( relx = 0.550,
+        #                            rely = 0.30 )
 
-        self.lbl_date_in = tkinter.Label( self.frm_title,
-                                font = self.title_font,
-                                background = 'yellow',
-                                text = 'In' )
-        self.lbl_date_in.place( relx = 0.795,
-                                rely = 0.30 )
+        # self.lbl_country = tkinter.Label( self.frm_title,
+        #                         font = self.title_font,
+        #                         background = 'yellow',
+        #                         text = 'Nationality' )
+        # self.lbl_country.place( relx = 0.630,
+        #                         rely = 0.30 )
 
-        self.lbl_date_out = tkinter.Label( self.frm_title,
-                                font = self.title_font,
-                                background = 'yellow',
-                                text = 'Out' )
-        self.lbl_date_out.place( relx = 0.835,
-                                 rely = 0.30 )
+        # self.lbl_ID = tkinter.Label( self.frm_title,
+        #                         font = self.title_font,
+        #                         background = 'yellow',
+        #                         text = 'ID' )
+        # self.lbl_ID.place( relx = 0.745,
+        #                    rely = 0.30 )
 
-        self.lbl_E_mail = tkinter.Label( self.frm_title,
-                                font = self.title_font,
-                                background = 'yellow',
-                                text = 'Email' )
-        self.lbl_E_mail.place( relx = 0.890,
-                               rely = 0.30 )
+        # self.lbl_date_in = tkinter.Label( self.frm_title,
+        #                         font = self.title_font,
+        #                         background = 'yellow',
+        #                         text = 'In' )
+        # self.lbl_date_in.place( relx = 0.795,
+        #                         rely = 0.30 )
+
+        # self.lbl_date_out = tkinter.Label( self.frm_title,
+        #                         font = self.title_font,
+        #                         background = 'yellow',
+        #                         text = 'Out' )
+        # self.lbl_date_out.place( relx = 0.835,
+        #                          rely = 0.30 )
+
+        # self.lbl_E_mail = tkinter.Label( self.frm_title,
+        #                         font = self.title_font,
+        #                         background = 'yellow',
+        #                         text = 'Email' )
+        # self.lbl_E_mail.place( relx = 0.890,
+        #                        rely = 0.30 )
 
 #=======================Text Frame Scrolled Text========================
 
@@ -734,6 +747,10 @@ class Hotel:
         self.ent_room_type.current( 0 )
         self.ent_room_number.current( 0 )
         self.ent_room_phone.current( 0 )
+        self.number_days.set( '' )
+        self.paid_tax.set( '' )
+        self.sub_total.set( '' )
+        self.total_cost.set( '' )
         # for idx in self.tree_view.get_children():
         #     self.tree_view.delete( idx )
         
@@ -763,16 +780,37 @@ class Hotel:
 
         last_row = Hotel_DB.insert_hotel_booking( booking )
         print( 'Last Row ID is :', last_row )
+        self.total_days()
+
+    def Delete_Booking( self, message = True ):
+        customerID = self.On_Tree_Select( event = None )
+        print( 'Delete CID', customerID )
+        if message == True:
+            delete_booking = tkinter.messagebox.askyesno(
+                title = 'Hotel Database Management System',
+                message = 'Confirm if you want to delete this booking?.' )
+            if delete_booking > 0:
+                self.Search_Booking()
+                RV = Hotel_DB.delete_hotel_booking_record( customerID )
+                self.Display_Booking()
+                print( RV )
+            else:
+                return
+        
+
+    def Update_Booking( self ):
+        self.Add_Booking()
+        self.Delete_Booking( message = False )
+        self.Search_Booking()
+        
+       
 
     def Search_Booking( self ):
-        from typing import Mapping, Sequence
         customerID = self.On_Tree_Select( event = None )
         data = Hotel_DB.search_hotel_booking_record( customerID )
         #print( data.keys())
-        print( data[3] )
-        print( data[r'Address'])
-        #xxx = date[r'Address']
-        #print( xxx )
+        #print( data[3] )
+        #print( data[r'Address'])
         self.Reset()
 
         self.customer_ID.set( data[r'Customer_ID'])
@@ -839,7 +877,7 @@ class Hotel:
                                 activeforeground = 'SlateBlue1',
                                 activebackground = 'thistle',
                                 command = self.Add_Booking,
-                                text = 'AddNew/Total' )
+                                text = 'AddNew' )
         self.btn_total_data.place( relx = 0.006,
                                    rely = 0,
                                    relheight = 1 )
@@ -851,7 +889,7 @@ class Hotel:
                                 activebackground = 'sea green',
                                 command = self.Display_Booking,
                                 text = 'Display' )
-        self.btn_display.place( relx = 0.141,
+        self.btn_display.place( relx = 0.098,
                                 rely = 0,
                                 relheight = 1 )
 
@@ -860,8 +898,9 @@ class Hotel:
                                 borderwidth = 4,
                                 activeforeground = 'Orange',
                                 activebackground = 'purple',
+                                command = self.Update_Booking,
                                 text = 'Update' )
-        self.btn_update.place( relx = 0.225,
+        self.btn_update.place( relx = 0.183,
                                rely = 0,
                                relheight = 1 )
 
@@ -870,8 +909,9 @@ class Hotel:
                                 borderwidth = 4,
                                 activeforeground = 'gray25',
                                 activebackground = 'black',
+                                command = self.Delete_Booking,
                                 text = 'Delete' )
-        self.btn_delete.place( relx = 0.307,
+        self.btn_delete.place( relx = 0.267,
                                rely = 0,
                                relheight = 1 )
 
@@ -882,7 +922,7 @@ class Hotel:
                                 activebackground = 'ghost white',
                                 command = self.Search_Booking,
                                 text = 'Search' )
-        self.btn_search.place( relx = 0.382,
+        self.btn_search.place( relx = 0.344,
                                rely = 0,
                                relheight = 1 )
 
@@ -893,7 +933,7 @@ class Hotel:
                                 activebackground = 'ghost white',
                                 command = self.Reset,
                                 text = 'Reset' )
-        self.btn_reset.place( relx = 0.461,
+        self.btn_reset.place( relx = 0.424,
                               rely = 0,
                               relheight = 1 )
 
@@ -904,9 +944,20 @@ class Hotel:
                                 activebackground = 'gray34',
                                 command = self.Random_Data,
                                 text = 'Random' )
-        self.btn_random.place( relx = 0.530,
+        self.btn_random.place( relx = 0.495,
                                rely = 0,
                                relheight = 1 )
+
+        self.btn_total_days = tkinter.Button( self.frm_button,
+                                font = self.btn_font,
+                                borderwidth = 4,
+                                activeforeground = 'yellow',
+                                activebackground = 'gray34',
+                                command = self.total_days,
+                                text = 'Total Days' )
+        self.btn_total_days.place( relx = 0.587,
+                                   rely = 0,
+                                   relheight = 1 )
 
         self.btn_exit = tkinter.Button( self.frm_button,
                                 font = self.btn_font,
@@ -915,7 +966,7 @@ class Hotel:
                                 activebackground = 'ghost white',
                                 command = self.Ask_Quit,
                                 text = 'Exit' )
-        self.btn_exit.place( relx = 0.620,
+        self.btn_exit.place( relx = 0.695,
                              rely = 0,
                              relheight = 1 )
 
@@ -996,13 +1047,13 @@ class Hotel:
 
     def generate_random_meal( self ):
         ''' Random Meal '''
-        RM = random.randint( 0,
+        RM = random.randint( 1,
                 len( self.ent_meal_type['values'][:-1] ))
         return( self.ent_meal_type['values'][RM] )
 
     def generate_random_room_type( self ):
         ''' Random Room Type '''
-        RRT = random.randint( 0,
+        RRT = random.randint( 1,
                 len( self.ent_room_type['values'][:-1] ))
         return( self.ent_room_type['values'][RRT] )
 
@@ -1045,6 +1096,67 @@ class Hotel:
         self.room_type.set( self.generate_random_room_type())
         self.room_number.set( self.generate_random_room_number())
         self.room_phone.set( self.generate_random_room_phone())
+
+#===========================Total Days==================================
+    def total_days( self ):
+        date_format = '%d-%m-%Y'
+        in_date = datetime.strptime( 
+                  self.check_in_date.get(), date_format )
+        out_date = datetime.strptime(
+                  self.check_out_date.get(), date_format )
+        self.number_days.set( abs(( out_date - in_date ).days ))
+
+        self.meal_cost = {'Breakfast':          17.00,
+                         'Full Breakfast':      22.00,
+                         'Champange Breakfast': 32.00,
+                         'Instant Breakfast':   15.00,
+                         'Lunch':               25.00,
+                         'Packed Lunch':        16.00,
+                         'Dinner':              35.00,
+                         'Sunday Dinner':       38.00,
+                         'Full Course Dinner':  45.00}
+
+        self.room_cost = {'Single Room':    34.00,
+                         'Double Room':     43.00,
+                         'Twin Room':       63.00,
+                         'Studio Room':     83.00,
+                         'Triple Room':     103.00,
+                         'Quad Room':       123.00,
+                         'Queen Room':      143.00,
+                         'King Room':       163.00,
+                         'Mini Suite Room': 183.00,
+                         'Suite Room':      250.00}
+
+        # MT = self.generate_random_meal()
+        # RT = self.generate_random_room_type()
+        MT = self.meal_type.get()
+        RT = self.room_type.get()
+        print( 'Total Days is :', self.number_days.get()) 
+        print( 'Meal Type is :', MT )
+        print( 'Meal Cost is :', self.meal_cost[MT] )
+        print( 'Room Type is :', RT )
+        print( 'Room Cost is :', self.room_cost[RT] )
+
+#===========================Math========================================
+
+        meal_cost = float( self.meal_cost[MT] )
+        room_cost = float( self.room_cost[RT] )
+        number_of_days = float( self.number_days.get())
+        meal_room = float( meal_cost + room_cost )
+        days_meal_room = float( number_of_days * meal_room )
+
+        the_tax = '$' + str( '%.2f' % (( days_meal_room ) * 0.09 ))
+        sub_total = '$' + str( '%.2f' % (( days_meal_room )))
+        the_total = '$' + str( '%.2f' % ( days_meal_room + 
+                                        (( days_meal_room ) * 0.09 )))
+        self.paid_tax.set( the_tax )
+        self.sub_total.set( sub_total )
+        self.total_cost.set( the_total )
+
+        print( 'Paid Tax is :', the_tax )
+        print( 'Sub Total is :', sub_total )
+        print( 'Total Cost is :', the_total )
+
 
 if __name__ == '__main__':
     root = tkinter.Tk()

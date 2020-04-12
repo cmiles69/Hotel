@@ -27,7 +27,8 @@ def insert_hotel_booking( booking ):
     ''' Insert a new Hotel booking into the booking table '''
     conn = get_conn()
 
-    sql_booking = ''' INSERT INTO booking(Customer_ID,
+    sql_booking = ''' INSERT OR IGNORE INTO booking(
+                                          Customer_ID,
                                           Firstname,
                                           Surname,
                                           Address,
@@ -101,64 +102,71 @@ def search_hotel_booking_record( record ):
     return( table_data )
 
 
-def delete_hotel_booking_record( id ):
+def delete_hotel_booking_record( CID ):
     conn = get_conn()
     db_cursor = conn.cursor()
-    db_cursor.execute( '''DELETE FROM booking WHERE id = ?''', ( id, ) )
+    db_cursor.execute( '''DELETE FROM booking
+                          WHERE Customer_ID = ?''', ( CID, ))
     conn.commit()
+    RC = db_cursor.rowcount
     db_cursor.close()
     conn.close()
+    if RC > 1:
+        return( 'Successfully Deleted Database Record', RC )
 
-# def search_hotel_booking_record( Customer_ID,
-#                                  Firstname,
-#                                  Surname,
-#                                  Address,
-#                                  Gender,
-#                                  Mobile,
-#                                  Nationality,
-#                                  Type_Of_ID,
-#                                  DateIn,
-#                                  DateOut,
-#                                  Email):
-#     conn = get_conn()
-#     db_cursor = conn.cursor()
-#     db_cursor.executemany( '''SELECT * FROM booking WHERE
-#                            Customer_ID = ? OR
-#                            Firstname   = ? OR
-#                            Surname     = ? OR
-#                            Address     = ? OR
-#                            Gender      = ? OR
-#                            Mobile      = ? OR
-#                            Nationality = ? OR
-#                            Type_Of_ID  = ? OR
-#                            DateIn      = ? OR
-#                            DateOut     = ? OR
-#                            Email       = ?''' )
-#     items = cursor.fetchall()
-#     db_cursor.close()
-#     conn.close()
-#     return items
 
-def update_hotel_booking_record( id, booking_data ):
+def update_hotel_booking_record( ID ):
+    #data = ( [booking_data], ID )
     conn = get_conn()
     db_cursor = conn.cursor()
-    db_cursor.executemany( ''' UPDATE booking SET
+    
+    sql_update = '''UPDATE booking SET
                            Customer_ID = ?,
                            Firstname   = ?,
                            Surname     = ?,
                            Address     = ?,
-                           Gender      = ?,
+                           Birth_Date  = ?,
+                           Post_Code   = ?,
                            Mobile      = ?,
+                           Email       = ?,
                            Nationality = ?,
-                           Type_Of_ID  = ?,
+                           Gender      = ?,
                            DateIn      = ?,
                            DateOut     = ?,
-                           Email       = ?
-                        WHERE id       = ?''',
-                        booking_data, ( id, ) )
+                           ID_Type     = ?,
+                           Meal_Type   = ?,
+                           Room_Type   = ?,
+                           Room_Number = ?,
+                           Room_Phone  = ?
+                    WHERE Customer_ID = ?'''  
+    db_cursor.execute( sql_update,
+                     Hotel.ent_customer_ID.get(),
+                     self.ent_firstname.get(),
+                     self.ent_surname.get(),
+                     self.ent_address.get(),
+                     self.ent_DOB.get(),
+                     self.ent_post_code.get(),
+                     self.ent_mobile.get(),
+                     self.ent_email.get(),
+                     self.ent_nationality.get(),
+                     self.ent_gender.get(),
+                     self.check_in_date.get(),
+                     self.check_out_date.get(),
+                     self.ent_proof_of_ID.get(),
+                     self.ent_meal_type.get(),
+                     self.ent_room_type.get(),
+                     self.ent_room_number.get(),
+                     self.ent_room_phone.get(),
+                     ( ID, ))
     conn.commit()
+    RC = db_cursor.rowcount
     db_cursor.close()
     conn.close()
+    if RC > 1:
+        return( 'Successfully Updated Database' )
+
+    # rowcount > 1
+    # https://pynative.com/python-sqlite-update-table/
 
 def create_table( conn, sql_script ):
         ''' Create a database table from an sql statement'''
