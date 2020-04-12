@@ -115,58 +115,40 @@ def delete_hotel_booking_record( CID ):
         return( 'Successfully Deleted Database Record', RC )
 
 
-def update_hotel_booking_record( ID ):
-    #data = ( [booking_data], ID )
+def update_hotel_booking_record( booking ):
     conn = get_conn()
     db_cursor = conn.cursor()
-    
-    sql_update = '''UPDATE booking SET
-                           Customer_ID = ?,
-                           Firstname   = ?,
-                           Surname     = ?,
-                           Address     = ?,
-                           Birth_Date  = ?,
-                           Post_Code   = ?,
-                           Mobile      = ?,
-                           Email       = ?,
-                           Nationality = ?,
-                           Gender      = ?,
-                           DateIn      = ?,
-                           DateOut     = ?,
-                           ID_Type     = ?,
-                           Meal_Type   = ?,
-                           Room_Type   = ?,
-                           Room_Number = ?,
-                           Room_Phone  = ?
-                    WHERE Customer_ID = ?'''  
-    db_cursor.execute( sql_update,
-                     Hotel.ent_customer_ID.get(),
-                     self.ent_firstname.get(),
-                     self.ent_surname.get(),
-                     self.ent_address.get(),
-                     self.ent_DOB.get(),
-                     self.ent_post_code.get(),
-                     self.ent_mobile.get(),
-                     self.ent_email.get(),
-                     self.ent_nationality.get(),
-                     self.ent_gender.get(),
-                     self.check_in_date.get(),
-                     self.check_out_date.get(),
-                     self.ent_proof_of_ID.get(),
-                     self.ent_meal_type.get(),
-                     self.ent_room_type.get(),
-                     self.ent_room_number.get(),
-                     self.ent_room_phone.get(),
-                     ( ID, ))
-    conn.commit()
-    RC = db_cursor.rowcount
-    db_cursor.close()
-    conn.close()
-    if RC > 1:
-        return( 'Successfully Updated Database' )
+      
+    try:
+        db_cursor.executemany( '''UPDATE booking SET
+                                Customer_ID = ?,
+                                Firstname   = ?,
+                                Surname     = ?,
+                                Address     = ?,
+                                Birth_Date  = ?,
+                                Post_Code   = ?,
+                                Mobile      = ?,
+                                Email       = ?,
+                                Nationality = ?,
+                                Gender      = ?,
+                                DateIn      = ?,
+                                DateOut     = ?,
+                                ID_Type     = ?,
+                                Meal_Type   = ?,
+                                Room_Type   = ?,
+                                Room_Number = ?,
+                                Room_Phone  = ?
+                              WHERE Customer_ID = ?;''', ( booking ))
+        conn.commit()
+        print( 'Record Updated Successfully' )
+    except sqlite3.Error as error:
+        print("Failed to update sqlite table", error)
+    finally:
+        if (conn):
+            db_cursor.close()
+            conn.close()
+            print("The SQLite connection is closed")
 
-    # rowcount > 1
-    # https://pynative.com/python-sqlite-update-table/
 
 def create_table( conn, sql_script ):
         ''' Create a database table from an sql statement'''

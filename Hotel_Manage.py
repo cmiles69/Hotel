@@ -799,11 +799,27 @@ class Hotel:
         
 
     def Update_Booking( self ):
-        self.Add_Booking()
-        self.Delete_Booking( message = False )
-        self.Search_Booking()
-        
-       
+        ID = self.customer_ID.get()
+        booking = [( self.ent_customer_ID.get(),
+                     self.ent_firstname.get(),
+                     self.ent_surname.get(),
+                     self.ent_address.get(),
+                     self.ent_DOB.get(),
+                     self.ent_post_code.get(),
+                     self.ent_mobile.get(),
+                     self.ent_email.get(),
+                     self.ent_nationality.get(),
+                     self.ent_gender.get(),
+                     self.check_in_date.get(),
+                     self.check_out_date.get(),
+                     self.ent_proof_of_ID.get(),
+                     self.ent_meal_type.get(),
+                     self.ent_room_type.get(),
+                     self.ent_room_number.get(),
+                     self.ent_room_phone.get(), ID )]
+
+        Hotel_DB.update_hotel_booking_record( booking )
+           
 
     def Search_Booking( self ):
         customerID = self.On_Tree_Select( event = None )
