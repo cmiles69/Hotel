@@ -848,16 +848,15 @@ class Hotel:
         self.room_phone.set( data[r'Room_Phone'])
 
     def Display_Booking( self ):
-        #self.tbox.delete( 0.0, tkinter.END )
         for idx in self.tree_view.get_children():
             self.tree_view.delete( idx )
         for row in Hotel_DB.display_hotel_booking_record():
             self.tree_view.insert( '', tkinter.END,
-                                    values = ( row[0],
-                                               row[1],
-                                               row[2],
-                                               row[3],
-                                               row[4] ))
+                                    values = ( row[r'Customer_ID'],
+                                               row[r'Firstname'],
+                                               row[r'Surname'],
+                                               row[r'Mobile'],
+                                               row[r'Email'] ))
 
     def On_Tree_Select(self, event):
         print("selected items:")
@@ -880,9 +879,6 @@ class Hotel:
         ''' Return Customer Reference Number '''
 
         return( self.tree_view.item( item )['values'][0] )
-
-        # for idx in range( 5 ):
-        #     print( self.tree_view.item( item )['values'][idx] )
 
 #===============================Buttons=================================                        
 
@@ -999,13 +995,10 @@ class Hotel:
                                     start_date = '-90y',
                                     end_date = '-15y' ):
         fake = Faker()
-        #FD = fake.date_between( start_date, end_date )
         FD = fake.date_of_birth()  # Max age = 115
         return( FD.strftime( '%d-%m-%Y' ))
 
     def generate_random_future_date( self ):
-        ''' end_date = +30d '''
-        #Faker.seed( 359678923 )
         fake = Faker()
         FD = fake.date_between(start_date = 'today',
                                end_date = '+25d')
@@ -1052,12 +1045,12 @@ class Hotel:
 
     def generate_random_gender( self ):
         ''' Random Gender '''
-        RG = random.randint( 0, len( self.ent_gender['values'][:-1] ))
+        RG = random.randint( 1, len( self.ent_gender['values'][:-1] ))
         return( self.ent_gender['values'][RG] )
 
     def generate_random_ID_type( self ):
         ''' Random type of ID '''
-        RID = random.randint( 0,
+        RID = random.randint( 1,
                 len( self.ent_proof_of_ID['values'][:-1] ))
         return( self.ent_proof_of_ID['values'][RID] )
 
@@ -1075,13 +1068,13 @@ class Hotel:
 
     def generate_random_room_number( self ):
         ''' Random Room Number '''
-        RRN = random.randint( 0,
+        RRN = random.randint( 1,
                 len( self.ent_room_number['values'][:-1] ))
         return( self.ent_room_number['values'][RRN] )
 
     def generate_random_room_phone( self ):
         ''' Random Room Phone Number '''
-        RRPN = random.randint( 0,
+        RRPN = random.randint( 1,
                 len( self.ent_room_phone['values'][:-1] ))
         return( self.ent_room_phone['values'][RRPN] )
 

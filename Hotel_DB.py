@@ -16,7 +16,7 @@ def get_conn():
     try:
         con = sqlite3.connect( db_file,
         detect_types = sqlite3.PARSE_COLNAMES | sqlite3.PARSE_DECLTYPES )
-        print( con )
+        # print( con )
         print( sqlite3.version )
         print( 'Successfull Connection!' )
         return con
@@ -58,6 +58,7 @@ def insert_hotel_booking( booking ):
 
 def display_hotel_booking_record():
     conn = get_conn()
+    conn.row_factory = sqlite3.Row
     db_cursor = conn.cursor()
     db_cursor.execute( '''SELECT Customer_ID,
                                  Firstname,
