@@ -9,7 +9,7 @@
 
 import sqlite3
 
-db_file = ( r'/home/miles/Documents/Python/Hotel/hotel.sqlite3' )
+db_file = ( r'hotel.sqlite3' )
 
 def get_conn():
     con = None
@@ -200,4 +200,4 @@ def create_hotel_booking_table():
 
 if __name__ == '__main__':
     pass
-    # create_hotel_booking_table()
+    #create_hotel_booking_table()
