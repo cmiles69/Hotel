@@ -8,13 +8,16 @@
 # Craig Miles -> cmiles69@hushmail.com
 
 import sqlite3
+import os.path
 
-db_file = ( r'hotel.sqlite3' )
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+db_path = os.path.join(BASE_DIR, r'hotel.sqlite3' )
 
 def get_conn():
     con = None
+    #db_file = ( r'employee.sqlite3' )
     try:
-        con = sqlite3.connect( db_file,
+        con = sqlite3.connect( db_path,
         detect_types = sqlite3.PARSE_COLNAMES | sqlite3.PARSE_DECLTYPES )
         # print( con )
         print( sqlite3.version )

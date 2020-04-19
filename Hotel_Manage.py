@@ -379,7 +379,7 @@ class Hotel:
         self.ent_check_in_date = DateEntry( self.frm_reference,
                                 font = self.ent_font,
                                 year = 2020,  # Default to today
-                                month = 4,    # If not prescent
+                                month = 4,    # If not present
                                 date_pattern = 'dd-mm-y',
                                 textvariable = self.check_in_date )
         self.ent_check_in_date.place( relx = 0.47,
@@ -727,7 +727,8 @@ class Hotel:
             message = 'Confirm if you want to exit program?' )
         if exit_program > 0:
             self.root.destroy()
-        return
+        else:
+            return( None )
 
     def Reset( self ):
         self.ent_customer_ID.delete( 0, tkinter.END )
